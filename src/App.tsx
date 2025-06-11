@@ -1,9 +1,13 @@
 import React, { useEffect, useMemo, useState, type SyntheticEvent } from 'react';
 import image from '../src/assets/pig.jpg'
-import MovieList from './components/MovieList';
 import GenreRow from './components/GenreRow';
 import HeroSection from './components/HeroSection';
 import TopPicks from './components/TopPicks';
+import { useNavigate } from 'react-router-dom';
+import Header from './components/Header';
+import { fetchMovies } from './utils/api';
+
+
 
 function App() {
 
@@ -15,33 +19,34 @@ function App() {
     rating: number;
   };
 
+  const navigate = useNavigate();
+
   const [searchQuery, setSearchQuery] = useState('');
   const [movies, setMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedHeroMovie, setSelectedHeroMovie] = useState<Movie | null>(null); // New state for selected hero movie
-  const [visibleCount, setVisibleCount] = useState(2); // How many genre rows to show initially (excluding Top Picks)
 
 
 
   const handleSearch = (e: SyntheticEvent) => {
     e.preventDefault();
-    console.log('Searching for:', searchQuery);
-    // Add your search logic here
+    if (searchQuery.trim()) {
+      navigate(`/search?q=${encodeURIComponent(searchQuery)}`);
+    }
   };
 
 
-  useEffect(() => {
-    fetch("http://localhost:8000/movies")
-      .then((res) => res.json())
-      .then((data) => {
-        setMovies(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error("Failed to fetch movies:", err);
-        setLoading(false);
-      });
-  }, []);
+useEffect(() => {
+  fetchMovies()
+    .then(data => {
+      setMovies(data);
+      setLoading(false);
+    })
+    .catch(err => {
+      console.error("Failed to fetch movies:", err);
+      setLoading(false);
+    });
+}, []);
 
   // Find highest rated movie for hero section initially, or use the selectedHeroMovie
   const heroMovie = useMemo(() => {
@@ -74,39 +79,46 @@ function App() {
   const genreEntries = Object.entries(genreMap);
 
   // Lazy loading more genre rows on scroll
-  useEffect(() => {
-    function onScroll() {
-      console.log('hereeeee');
-      const scrollTop = window.scrollY;
-      const windowHeight = window.innerHeight;
-      const fullHeight = document.documentElement.scrollHeight;
+  // useEffect(() => {
+  //   function onScroll() {
+  //     console.log('hereeeee');
+  //     const scrollTop = window.scrollY;
+  //     const windowHeight = window.innerHeight;
+  //     const fullHeight = document.documentElement.scrollHeight;
 
-      // If user scrolled near bottom (within 300px), load more genres
-      if (scrollTop + windowHeight > fullHeight - 300) {
-        setVisibleCount((count) => Math.min(count + 2, genreEntries.length));
-      }
-    }
+  //     // If user scrolled near bottom (within 300px), load more genres
+  //     if (scrollTop + windowHeight > fullHeight - 300) {
+  //       setVisibleCount((count) => Math.min(count + 2, genreEntries.length));
+  //     }
+  //   }
 
-    window.addEventListener('scroll', onScroll);
-    return () => window.removeEventListener('scroll', onScroll);
-  }, [genreEntries.length]);
+  //   window.addEventListener('scroll', onScroll);
+  //   return () => window.removeEventListener('scroll', onScroll);
+  // }, [genreEntries.length]);
 
   return (
     <>
 
       {heroMovie &&
         <div className="bg-gray-900 min-h-screen text-white">
+          {/* Header with Search Bar */}
+          <Header
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            handleSearch={handleSearch}
+          />
+
           {/* Hero Section with Top Picks integrated */}
           <div
             className="relative h-[85vh] w-full bg-cover bg-center flex flex-col justify-between px-4 md:px-8 lg:px-16"
             style={{
-              backgroundImage: `linear-gradient(to right, rgba(0,0,0,0.85) 30%, transparent 70%), url(${image})`
+              backgroundImage: `linear-gradient(to right, rgba(0,0,0,0.85) 30%, transparent 70%), url(${image})`,
             }}
           >
             <div className='flex-[0.5]'></div>
             {/* Main Hero Content */}
             <HeroSection heroMovie={heroMovie} backgroundImage={image} />
-            
+
             {/* Top Picks Section integrated at bottom */}
             <TopPicks
               movies={movies}
@@ -120,17 +132,16 @@ function App() {
           </div>
 
           {/* Additional content sections would go here */}
-          {Object.entries(genreMap).slice(0, 4).map(([genre, genreMovies]) => (
+          {Object.entries(genreMap).map(([genre, genreMovies]) => (
             <GenreRow
               key={genre}
               title={genre}
-              movies={genreMovies.slice(0, 10)}
+              movies={genreMovies.slice(0, 1)}
               heroMovieId={heroMovie?.id}
             />
           ))}
         </div>
       }
-      {/* <MovieList /> */}
     </>
   );
 }
