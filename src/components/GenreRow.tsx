@@ -1,4 +1,3 @@
-// components/GenreRow.tsx
 import React, { useRef } from 'react';
 import MovieCard from './MovieCard';
 
@@ -14,10 +13,9 @@ type Props = {
   title: string;
   movies: Movie[];
   heroMovieId?: string;
-  onSelect?: (movie: Movie) => void;
 };
 
-const GenreRow: React.FC<Props> = ({ title, movies, heroMovieId, onSelect }) => {
+const GenreRow: React.FC<Props> = ({ title, movies, heroMovieId }) => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const scroll = (direction: 'left' | 'right') => {
@@ -37,7 +35,6 @@ const GenreRow: React.FC<Props> = ({ title, movies, heroMovieId, onSelect }) => 
         <span className="ml-4 text-gray-400 text-lg">({movies.length})</span>
       </h2>
 
-      {/* Left Arrow */}
       <button
         onClick={() => scroll('left')}
         className="absolute top-1/2 left-2 -translate-y-1/2 z-20 bg-gray-700 bg-opacity-50 rounded-full p-2 hover:bg-opacity-80 transition"
@@ -56,7 +53,6 @@ const GenreRow: React.FC<Props> = ({ title, movies, heroMovieId, onSelect }) => 
         </svg>
       </button>
 
-      {/* Right Arrow */}
       <button
         onClick={() => scroll('right')}
         className="absolute top-1/2 right-2 -translate-y-1/2 z-20 bg-gray-700 bg-opacity-50 rounded-full p-2 hover:bg-opacity-80 transition"
@@ -85,7 +81,6 @@ const GenreRow: React.FC<Props> = ({ title, movies, heroMovieId, onSelect }) => 
               key={movie.id}
               movie={movie}
               isActive={heroMovieId === movie.id}
-              onClick={() => onSelect?.(movie)}
             />
           ))}
         </div>

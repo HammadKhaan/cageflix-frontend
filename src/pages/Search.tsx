@@ -24,7 +24,7 @@ const SearchResults: React.FC = () => {
     const queryParam = useQuery().get("q") || "";
     const navigate = useNavigate();
 
-    const [searchQuery, setSearchQuery] = useState(queryParam); // Controlled input field
+    const [searchQuery, setSearchQuery] = useState(queryParam);
     const [movies, setMovies] = useState<Movie[]>([]);
     const [loading, setLoading] = useState(true);
 
@@ -56,7 +56,7 @@ const SearchResults: React.FC = () => {
         e.preventDefault();
         if (searchQuery.trim()) {
             navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`, {
-                replace: true, // <- Replaces the current entry in browser history
+                replace: true,
             });
         }
     };
@@ -66,7 +66,6 @@ const SearchResults: React.FC = () => {
 
     return (
         <div className="bg-gray-900 min-h-screen text-white">
-            {/* Header component with controlled search input */}
             <Header
                 searchQuery={searchQuery}
                 setSearchQuery={setSearchQuery}

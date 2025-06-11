@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { fetchPoster } from '../utils/api';
+import { useNavigate } from 'react-router-dom';
 
 type Props = {
   movie: {
@@ -10,11 +11,12 @@ type Props = {
     rating: number;
   };
   isActive?: boolean;
-  onClick?: () => void;
 };
 
-const MovieCard: React.FC<Props> = ({ movie, isActive = false, onClick }) => {
+const MovieCard: React.FC<Props> = ({ movie, isActive = false }) => {
   const [posterUrl, setPosterUrl] = useState<string | null>(null);
+  const navigate = useNavigate();
+
 
   useEffect(() => {
     fetchPoster(movie.id)
@@ -24,25 +26,23 @@ const MovieCard: React.FC<Props> = ({ movie, isActive = false, onClick }) => {
 
   return (
     <div
-      onClick={onClick}
-      className={`cursor-pointer flex-shrink-0 w-64 rounded-xl overflow-hidden transition-all duration-300 ${
-        isActive
-          ? 'ring-4 ring-red-500 scale-105'
-          : 'bg-gray-800 shadow-xl hover:shadow-2xl hover:-translate-y-2'
-      }`}
+      onClick={() => navigate(`/movie/${movie.id}`)}
+      className={`cursor-pointer flex-shrink-0 w-64 rounded-xl overflow-hidden transition-all duration-300 ${isActive
+        ? 'ring-4 ring-red-500 scale-105'
+        : 'bg-gray-800 shadow-xl hover:shadow-2xl hover:-translate-y-2'
+        }`}
     >
-      {/* Poster or Fallback */}
-      <div className="h-40 w-full bg-black flex items-center justify-center overflow-hidden">
-        {posterUrl ? (
+      {posterUrl ? (
+        <div className="h-40 w-full bg-black flex items-center justify-center overflow-hidden">
           <img
             src={posterUrl}
             alt={`${movie.title} poster`}
             className="w-full h-full object-cover"
           />
-        ) : (
-          <div className="text-center px-4 text-white text-sm">Poster Unavailable</div>
-        )}
-      </div>
+        </div>
+      ) : (
+        <div className="h-40 bg-gradient-to-r from-indigo-900/80 to-purple-800/80 text-center px-4 text-white text-sm flex items-center justify-center">Poster Unavailable</div>
+      )}
 
       <div className="p-4 bg-gray-800">
         <h3 className="font-bold text-lg text-white mb-1">{movie.title}</h3>

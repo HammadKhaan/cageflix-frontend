@@ -7,6 +7,8 @@ import "./index.css";
 import App from './App';
 import Search from './pages/Search';
 import SplashScreen from './components/SplashScreen';
+import UnderConstruction from './pages/UnderConstruction';
+import MovieDescription from './pages/MovieDescription';
 
 const Main = () => {
   const [showSplash, setShowSplash] = useState(true);
@@ -25,6 +27,8 @@ const Main = () => {
       <Routes>
         <Route path="/" element={<App />} />
         <Route path="/search" element={<Search />} />
+        <Route path="/under-construction" element={<UnderConstruction />} />
+        <Route path="/movie/:id" element={<MovieDescription />} />
       </Routes>
     </BrowserRouter>
   );
