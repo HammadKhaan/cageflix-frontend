@@ -1,54 +1,65 @@
-# React + TypeScript + Vite
+# 🎬 CageFlix - Collection of all movies and shows of Nicolas Cage
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+CageFlix is a dynamic, responsive movie explorer built with React and TypeScript. It fetches all Nicolas Cage's movie data and displays it in an engaging and cinematic UI. The app features a hero section, top picks, genre rows, and full-screen movie detail pages with animated transitions.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Features
 
-## Expanding the ESLint configuration
+- 🏆 **Hero Section**: Highlights the top-rated movie with IMDb score and metadata.
+- 🎥 **Top Picks Carousel**: Horizontally scrollable movie posters.
+- 📁 **Genre Rows**: Movies grouped by genre.
+- 📄 **Movie Detail Page**: Dedicated full-screen view for each movie.
+- 🔍 **Search Functionality**: Navigate to results based on user queries.
+- 📱 **Responsive Design**: Works great on desktop and mobile.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+## 🧰 Tech Stack
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+| Tool           | Reason for Use |
+|----------------|----------------|
+| **React**      | Component-based UI and interactivity |
+| **TypeScript** | Type safety and better tooling support |
+| **Tailwind CSS** | Utility-first styling and responsive design |
+| **React Router** | SPA routing and navigation |
+| **Heroicons**   | Clean and consistent icons |
+| **Custom API** (Mock or actual) | Fetches movie and poster data |
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+---
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+## 🛠️ Setup Instructions
+
+1. **Clone the repo**
+   ```bash
+   git clone https://github.com/your-username/cageflix-frontend.git
+   cd cageflix-frontend
+
+2. **Install dependencies**
+   ```bash
+   npm install
+
+3. **Start the dev server**
+   ```bash
+   npm run dev
+
+4. **Visit in browser**
+    Open http://localhost:5173
+
+
+## ⚠️ Known Issues
+🔄 Some poster URLs may be unavailable from the backend or API and fall back to a placeholder.
+
+💾 No persistent storage — app state resets on refresh.
+
+🧠 No recommendation logic for related movies (yet).
+
+
+## ✨ Future Enhancements
+🔎 Dedicated search results page with filters and pagination.
+
+👥 User authentication for watchlists and favorites.
+
+📽️ Trailer embedding from YouTube or TMDB.
+
+💡 Improve lazy loading and infinite scroll for better performance.
