@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState, type SyntheticEvent } from 'react';
+import { useEffect, useMemo, useState, type SyntheticEvent } from 'react';
 import image from '../src/assets/pig.jpg'
 import GenreRow from './components/GenreRow';
 import HeroSection from './components/HeroSection';
@@ -23,7 +23,6 @@ function App() {
 
   const [searchQuery, setSearchQuery] = useState('');
   const [movies, setMovies] = useState<Movie[]>([]);
-  const [loading, setLoading] = useState(true);
   const [selectedHeroMovie, setSelectedHeroMovie] = useState<Movie | null>(null);
   const [heroMoviePosterUrl, setHeroMoviePosterUrl] = useState<string | null>(null);
 
@@ -41,11 +40,9 @@ function App() {
     fetchMovies()
       .then(data => {
         setMovies(data);
-        setLoading(false);
       })
       .catch(err => {
         console.error("Failed to fetch movies:", err);
-        setLoading(false);
       });
   }, []);
 

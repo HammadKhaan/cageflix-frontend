@@ -20,7 +20,6 @@ function useQuery() {
 }
 
 const SearchResults: React.FC = () => {
-    const location = useLocation();
     const queryParam = useQuery().get("q") || "";
     const navigate = useNavigate();
 
