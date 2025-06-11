@@ -10,7 +10,7 @@ CageFlix is a dynamic, responsive movie explorer built with React and TypeScript
 - 🎥 **Top Picks Carousel**: Horizontally scrollable movie posters.
 - 📁 **Genre Rows**: Movies grouped by genre.
 - 📄 **Movie Detail Page**: Dedicated full-screen view for each movie.
-- 🔍 **Search Functionality**: Navigate to results based on user queries.
+- 🔍 **Search Functionality**: Fuzzy search for partial/misspelled, genre and title based queries.
 - 📱 **Responsive Design**: Works great on desktop and mobile.
 
 ---
@@ -23,6 +23,7 @@ CageFlix is a dynamic, responsive movie explorer built with React and TypeScript
 | **TypeScript** | Type safety and better tooling support |
 | **Tailwind CSS** | Utility-first styling and responsive design |
 | **React Router** | SPA routing and navigation |
+| **Fuse.js** | Lightweight fuzzy search library for client-side movie search functionality |
 | **Heroicons**   | Clean and consistent icons |
 | **Custom API** (Mock or actual) | Fetches movie and poster data |
 
