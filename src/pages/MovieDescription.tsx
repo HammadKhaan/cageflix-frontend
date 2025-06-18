@@ -1,41 +1,21 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { fetchMovies, fetchPoster } from '../utils/api';
+import React from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { ArrowLeftIcon, FilmIcon, PlayIcon } from '@heroicons/react/24/solid';
-
-type Movie = {
-    id: string;
-    title: string;
-    year: number;
-    genres: string[];
-    rating: number;
-};
+import Header from '../components/Header';
 
 const MovieDescription: React.FC = () => {
-    const { id } = useParams<{ id: string }>();
-    const [movie, setMovie] = useState<Movie | null>(null);
-    const [posterUrl, setPosterUrl] = useState<string | null>(null);
+    const { state } = useLocation();
     const navigate = useNavigate();
-
-    useEffect(() => {
-        fetchMovies().then((movies) => {
-            const found = movies.find((m) => m.id === id);
-            if (found) {
-                setMovie(found);
-                fetchPoster(found.id).then(setPosterUrl);
-            }
-        });
-    }, [id]);
-
-    if (!movie) return <div className="text-white p-8">Loading...</div>;
 
     return (
         <div
+            key={state.movie.id}
             className="relative h-screen w-full bg-cover bg-center text-white"
             style={{
-                backgroundImage: `linear-gradient(to right, rgba(0,0,0,0.8), rgba(0,0,0,0.3)), url(${posterUrl})`,
+                backgroundImage: `linear-gradient(to right, rgba(0,0,0,0.8), rgba(0,0,0,0.3)), url(${state.posterUrl})`,
             }}
         >
+            <Header />
             <div className="absolute top-4 left-4">
                 <button
                     onClick={() => navigate(-1)}
@@ -47,15 +27,15 @@ const MovieDescription: React.FC = () => {
             </div>
 
             <div className="flex flex-col justify-center h-full px-8 md:px-16 max-w-4xl">
-                <h1 className="text-4xl md:text-6xl font-bold mb-4">{movie.title}</h1>
+                <h1 className="text-4xl md:text-6xl font-bold mb-4">{state.movie.title}</h1>
                 <div className="flex gap-4 text-lg text-white/80 mb-2">
-                    <span>{movie.year}</span>
+                    <span>{state.movie.year}</span>
                     <span>|</span>
-                    <span>{movie.genres.join(', ')}</span>
+                    <span>{state.movie.genres.join(', ')}</span>
                 </div>
                 <div className="flex items-center gap-2 mb-6">
                     <div className="bg-yellow-500 text-black font-bold px-3 py-1 rounded-md">
-                        {movie.rating}/10
+                        {state.movie.rating}/10
                     </div>
                     <span className="text-yellow-300">IMDb Rating</span>
                 </div>

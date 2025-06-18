@@ -1,43 +1,26 @@
-// pages/SearchResults.tsx
-import React, { useEffect, useMemo, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import React, { useMemo } from 'react';
+import { useLocation } from 'react-router-dom';
 import Fuse from 'fuse.js';
 
 import Header from '../components/Header';
 import MovieCard from '../components/MovieCard';
-import { fetchMovies } from '../utils/api';
+import { fetchSearchedMovies } from '../utils/api';
+import Spinner from '../components/Spinner';
+import type { Movie } from '../types/Movie';
+import { useQuery } from '@tanstack/react-query';
+import ErrorMessage from '../components/ErrorMessage';
 
-type Movie = {
-    id: string;
-    title: string;
-    year: number;
-    genres: string[];
-    rating: number;
-};
-
-function useQuery() {
+function useQueryForSearch() {
     return new URLSearchParams(useLocation().search);
 }
 
 const SearchResults: React.FC = () => {
-    const queryParam = useQuery().get("q") || "";
-    const navigate = useNavigate();
+    const queryParam = useQueryForSearch().get("q") || "";
 
-    const [searchQuery, setSearchQuery] = useState(queryParam);
-    const [movies, setMovies] = useState<Movie[]>([]);
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        fetchMovies()
-            .then(data => {
-                setMovies(data);
-                setLoading(false);
-            })
-            .catch(err => {
-                console.error("Failed to fetch movies:", err);
-                setLoading(false);
-            });
-    }, []);
+    const { data: movies = [], isLoading, isError } = useQuery({
+        queryKey: ['searchedMovies'],
+        queryFn: fetchSearchedMovies,
+    });
 
     const fuse = useMemo(() => {
         return new Fuse(movies, {
@@ -47,29 +30,17 @@ const SearchResults: React.FC = () => {
         });
     }, [movies]);
 
-    const results = useMemo(() => {
-        return queryParam.trim() ? fuse.search(queryParam).map(res => res.item) : [];
+    const results = useMemo<Movie[]>(() => {
+        return queryParam.trim() ? fuse.search(queryParam).map(res => res.item as Movie) : [];
     }, [queryParam, fuse]);
 
-    const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        if (searchQuery.trim()) {
-            navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`, {
-                replace: true,
-            });
-        }
-    };
 
-
-    if (loading) return <div className="text-white p-6">Loading...</div>;
+    if (isLoading) return <div className="text-white p-6"><Spinner /></div>;
+    if (isError) return <div className="text-red-500 p-6"><ErrorMessage message='Failed to load search results' /></div>;
 
     return (
         <div className="bg-gray-900 min-h-screen text-white">
-            <Header
-                searchQuery={searchQuery}
-                setSearchQuery={setSearchQuery}
-                handleSearch={handleSearch}
-            />
+            <Header />
 
             <main className="pt-24 px-6">
                 {queryParam && (
