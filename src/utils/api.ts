@@ -1,11 +1,4 @@
-type Movie = {
-  id: string;
-  title: string;
-  year: number;
-  genres: string[];
-  rating: number;
-  posterUrl: string;  // ✅ add this if not already present
-};
+import type { Movie } from "../types/Movie";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
@@ -18,11 +11,21 @@ async function fetchWithHandling<T>(url: string): Promise<T> {
 }
 
 export async function fetchMovies(): Promise<Movie[]> {
-  return fetchWithHandling<Movie[]>(`${BASE_URL}/movies`);
+  const data = await fetchWithHandling<{ results: Movie[] }>(`${BASE_URL}/movies`);
+  return data.results;
 }
 
-export async function fetchMoviesByGenre(genre: string): Promise<Movie[]> {
-  return fetchWithHandling<Movie[]>(`${BASE_URL}/movies?genre=${encodeURIComponent(genre)}`);
+export async function fetchSearchedMovies(): Promise<Movie[]> {
+  const data = await fetchWithHandling<{ results: Movie[] }>(`${BASE_URL}/movies?limit=9999`);
+  return data.results;
+}
+
+export async function fetchMoviesByGenre(
+  genre: string,
+  offset = 0,
+  limit = 10
+): Promise<{ results: Movie[]; total: number }> {
+  return fetchWithHandling(`${BASE_URL}/movies?genre=${encodeURIComponent(genre)}&limit=${limit}&offset=${offset}`);
 }
 
 export async function fetchPoster(movieId: string): Promise<string | null> {

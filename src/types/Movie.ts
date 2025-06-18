@@ -1,10 +1,7 @@
 export interface Movie {
-  title: string;
-  year: string;
-  poster: string;
-  plot: string;
-  actors: string;
-  genre: string;
-  imdbRating: string;
-  runtime: string;
-}
+    id: string;
+    title: string;
+    year: number;
+    genres: string[];
+    rating: number;
+  };

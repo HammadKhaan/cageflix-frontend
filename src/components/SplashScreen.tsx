@@ -14,7 +14,7 @@ const SplashScreen: React.FC<Props> = ({ onFinish }) => {
   return (
     <AnimatePresence>
       <motion.div
-        className="fixed inset-0 bg-black flex flex-col justify-center items-center z-50"
+        className="fixed inset-0 bg-gray-900 flex flex-col justify-center items-center z-50"
         initial={{ opacity: 1 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
